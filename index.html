@@ -5,245 +5,186 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Grégoire Besson</title>
   <meta name="description" content="">
-  <meta name="theme-color" content="#121212">
+  <meta name="theme-color" content="#e2001a">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo/favicon-32.png">
   <link rel="apple-touch-icon" href="assets/img/logo/apple-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
 
-  <header class="header" id="header">
-    <div class="header__inner">
-      <a class="header__logo" href="#top" aria-label="Grégoire Besson">
-        <img src="assets/img/logo/logo-h.svg" alt="Grégoire Besson" width="188" height="28">
-      </a>
-      <nav class="nav" aria-label="Main">
-        <a href="#finder" data-i18n="nav.finder"></a>
-        <a href="#range" data-i18n="nav.machines"></a>
-        <a href="#heritage" data-i18n="nav.heritage"></a>
-        <a href="#names" data-i18n="nav.names"></a>
-        <a href="https://www.gregoire-besson.com/sv/dealers" data-i18n="nav.dealers"></a>
-      </nav>
-      <div class="header__end">
-        <div class="lang" id="lang">
-          <button class="lang__btn" aria-haspopup="listbox" aria-expanded="false" id="langBtn">
-            <span id="langCurrent">SV</span>
-            <svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-          </button>
-          <ul class="lang__list" role="listbox" id="langList" hidden></ul>
-        </div>
-        <a class="btn btn--red btn--sm header__cta" href="#contact" data-i18n="nav.contact"></a>
-        <button class="burger" id="burger" aria-expanded="false" aria-controls="mobileNav">
-          <span></span><span></span>
-          <span class="sr" data-i18n="menu"></span>
-        </button>
+  <!-- Top bar: GB Group + language (same pattern as the current site) -->
+  <div class="topbar">
+    <div class="container topbar__inner">
+      <div class="dd" data-dd>
+        <button class="dd__btn" aria-expanded="false">GB Group <i class="caret" aria-hidden="true"></i></button>
+        <ul class="dd__menu" hidden>
+          <li><a href="https://gb-group.co">GB Group</a></li>
+          <li><a href="https://agriway.it">Agriway</a></li>
+        </ul>
+      </div>
+      <div class="dd dd--right" data-dd>
+        <button class="dd__btn" aria-expanded="false" id="langBtn"><span id="langCurrent">Svenska</span> <i class="caret" aria-hidden="true"></i></button>
+        <ul class="dd__menu" hidden id="langList"></ul>
       </div>
     </div>
-    <div class="mnav" id="mobileNav" hidden>
-      <a href="#finder" data-i18n="nav.finder"></a>
-      <a href="#range" data-i18n="nav.machines"></a>
-      <a href="#heritage" data-i18n="nav.heritage"></a>
-      <a href="#names" data-i18n="nav.names"></a>
-      <a href="https://www.gregoire-besson.com/sv/dealers" data-i18n="nav.dealers"></a>
-      <a href="#contact" data-i18n="nav.contact"></a>
-      <div class="mnav__langs" id="mnavLangs"></div>
+  </div>
+
+  <!-- Red navbar -->
+  <header class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <a class="navbar__brand" href="#top" aria-label="Grégoire Besson">
+        <img src="assets/img/logo/logo-h.svg" alt="Grégoire Besson" width="164" height="25">
+      </a>
+      <button class="navbar__toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">
+        <span></span><span></span><span></span><span class="sr" data-i18n="nav.menu"></span>
+      </button>
+      <nav class="navbar__nav" id="navMenu" aria-label="Main">
+        <div class="navitem navitem--mega" data-dd>
+          <button class="navlink dd__btn" aria-expanded="false"><span data-i18n="nav.machines"></span> <i class="caret" aria-hidden="true"></i></button>
+          <div class="mega dd__menu" hidden>
+            <div class="container mega__grid" id="megaMenu"></div>
+          </div>
+        </div>
+        <div class="navitem" data-dd>
+          <button class="navlink dd__btn" aria-expanded="false"><span data-i18n="nav.services"></span> <i class="caret" aria-hidden="true"></i></button>
+          <ul class="dd__menu dd__menu--nav" hidden>
+            <li><a href="https://www.gregoire-besson.com/sv/parts-catalogues-manuals" data-i18n="nav.manuals"></a></li>
+            <li><a href="https://www.gregoire-besson.com/sv/video-tutorials" data-i18n="nav.videos"></a></li>
+          </ul>
+        </div>
+        <a class="navlink" href="https://marketing.gb-group.co/gregoire-besson" data-i18n="nav.media"></a>
+        <a class="navlink" href="#contact" data-i18n="nav.contact"></a>
+        <a class="navlink" href="https://www.gregoire-besson.com/sv/dealers" data-i18n="nav.dealers"></a>
+      </nav>
     </div>
   </header>
 
   <main id="main">
-    <!-- HERO -->
+    <!-- Hero -->
     <section class="hero" id="top">
-      <div class="hero__media" aria-hidden="true">
-        <img class="hero__slide is-active" src="assets/img/field/voyager-c80-dusk.jpg" alt="">
-        <img class="hero__slide" src="assets/img/field/rover-60-dust.jpg" alt="" loading="lazy">
-        <img class="hero__slide" src="assets/img/field/occitan-t70-dust.jpg" alt="" loading="lazy">
-        <img class="hero__slide" src="assets/img/field/voyager-c80-sunset.jpg" alt="" loading="lazy">
-      </div>
-      <div class="hero__shade"></div>
-      <div class="hero__content wrap">
-        <p class="eyebrow eyebrow--light"><span class="dot"></span><span data-i18n="hero.eyebrow"></span></p>
-        <h1 class="hero__title"><span data-i18n="hero.title.0"></span><br><em data-i18n="hero.title.1"></em></h1>
-        <p class="hero__lead" data-i18n="hero.lead"></p>
+      <img class="hero__img" src="assets/img/field/hero-home.jpg" alt="" width="1900" height="960">
+      <div class="hero__inner container">
+        <h1 class="hero__title" data-i18n="hero.title"></h1>
+        <p class="hero__text" data-i18n="hero.text"></p>
         <div class="hero__ctas">
-          <a class="btn btn--red" href="#finder"><span data-i18n="hero.cta"></span><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v12M3 9l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
-          <a class="btn btn--ghost" href="#contact" data-i18n="hero.cta2"></a>
+          <a class="btn btn--red btn--lg" href="#power" data-i18n="hero.cta"></a>
+          <a class="btn btn--outline-light btn--lg" href="#contact" data-i18n="hero.cta2"></a>
         </div>
-      </div>
-      <div class="hero__bar wrap">
-        <span class="mono" data-i18n="hero.place"></span>
-        <div class="hero__progress" id="heroProgress" aria-hidden="true"></div>
-        <span class="mono hero__caption" id="heroCaption"></span>
       </div>
     </section>
 
-    <!-- STATS -->
-    <section class="stats" aria-label="Key figures">
-      <div class="wrap stats__grid" id="stats"></div>
-    </section>
-
-    <!-- FINDER -->
-    <section class="section finder" id="finder">
-      <div class="wrap">
-        <div class="section__head">
-          <p class="kicker" data-i18n="finder.kicker"></p>
-          <h2 class="h2" data-i18n="finder.title"></h2>
-          <p class="lead" data-i18n="finder.lead"></p>
-        </div>
-
-        <div class="finder__panel">
-          <div class="finder__power">
-            <label class="mono finder__label" for="hp" data-i18n="finder.power"></label>
-            <output class="finder__readout" id="hpOut" for="hp"><span id="hpVal">180</span><small id="hpUnit">hk</small></output>
-            <div class="slider">
-              <input type="range" id="hp" min="50" max="600" step="5" value="180">
-              <div class="slider__ticks mono" aria-hidden="true">
-                <span>50</span><span>150</span><span>250</span><span>350</span><span>450</span><span>600</span>
-              </div>
+    <!-- Power selector -->
+    <section class="power" id="power">
+      <div class="container">
+        <h2 class="section-title" data-i18n="power.title"></h2>
+        <div class="power__box">
+          <p class="power__text" data-i18n="power.text"></p>
+          <div class="power__slider">
+            <img class="power__icon" src="assets/img/ui/tractor-small.jpg" alt="" width="42" height="32">
+            <div class="range" id="range">
+              <div class="range__track"><div class="range__fill" id="rangeFill"></div></div>
+              <input type="range" id="hpMin" min="50" max="600" step="5" value="50" aria-label="Min">
+              <input type="range" id="hpMax" min="50" max="600" step="5" value="600" aria-label="Max">
+              <output class="range__label" id="labelMin"></output>
+              <output class="range__label" id="labelMax"></output>
             </div>
+            <img class="power__icon power__icon--lg" src="assets/img/ui/tractor-large.jpg" alt="" width="56" height="37">
           </div>
-          <div class="finder__filters">
-            <div class="seg" role="tablist" id="catSeg"></div>
-            <button class="chip chip--active" id="seriesChip" hidden></button>
-            <p class="finder__count mono" id="finderCount" aria-live="polite"></p>
-          </div>
-        </div>
-
-        <div class="cards" id="cards"></div>
-        <p class="finder__none" id="finderNone" hidden data-i18n="finder.none"></p>
-      </div>
-    </section>
-
-    <!-- GALLERY STRIP -->
-    <section class="strip" aria-label="Gallery">
-      <div class="strip__track" id="strip"></div>
-    </section>
-
-    <!-- RANGE -->
-    <section class="section range" id="range">
-      <div class="wrap">
-        <div class="section__head">
-          <p class="kicker" data-i18n="range.kicker"></p>
-          <h2 class="h2" data-i18n="range.title"></h2>
-          <p class="lead" data-i18n="range.lead"></p>
-        </div>
-        <div id="rangeList"></div>
-      </div>
-    </section>
-
-    <!-- HERITAGE -->
-    <section class="heritage" id="heritage">
-      <div class="heritage__img">
-        <img src="assets/img/field/rover-80-chateau.jpg" alt="Rover 80" loading="lazy">
-        <span class="heritage__year" aria-hidden="true">1802</span>
-      </div>
-      <div class="wrap heritage__body">
-        <div class="heritage__text">
-          <p class="kicker kicker--light" data-i18n="heritage.kicker"></p>
-          <h2 class="h2" data-i18n="heritage.title"></h2>
-          <p data-i18n="heritage.p1"></p>
-          <p data-i18n="heritage.p2"></p>
-          <blockquote data-i18n="heritage.quote"></blockquote>
-        </div>
-        <ol class="features" id="features"></ol>
-      </div>
-    </section>
-
-    <!-- OLD NAMES -->
-    <section class="section names" id="names">
-      <div class="wrap names__grid">
-        <div class="section__head">
-          <p class="kicker" data-i18n="names.kicker"></p>
-          <h2 class="h2" data-i18n="names.title"></h2>
-          <p class="lead" data-i18n="names.lead"></p>
-        </div>
-        <div class="names__tool">
-          <label class="search">
-            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 12l4.5 4.5" stroke="currentColor" stroke-width="1.6"/></svg>
-            <input type="search" id="nameSearch" autocomplete="off" data-i18n-placeholder="names.placeholder">
-          </label>
-          <div class="names__table" role="table">
-            <div class="names__row names__row--head mono" role="row">
-              <span role="columnheader" data-i18n="names.old"></span>
-              <span role="columnheader" data-i18n="names.now"></span>
-            </div>
-            <div id="nameRows"></div>
+          <div class="power__foot">
+            <div class="pills" id="catPills" role="tablist"></div>
+            <p class="power__count" id="powerCount" aria-live="polite"></p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CONTACT -->
-    <section class="section contact" id="contact">
-      <div class="wrap contact__grid">
-        <div class="section__head">
-          <p class="kicker kicker--light" data-i18n="contact.kicker"></p>
-          <h2 class="h2" data-i18n="contact.title"></h2>
-          <p class="lead" data-i18n="contact.lead"></p>
-          <img class="contact__img" src="assets/img/field/voyager-c80-sunset.jpg" alt="" loading="lazy">
+    <!-- Ranges / product grid -->
+    <section class="ranges" id="machines">
+      <div class="container" id="ranges"></div>
+      <p class="container ranges__none" id="rangesNone" hidden data-i18n="power.none"></p>
+    </section>
+
+    <!-- Correspondence -->
+    <section class="corr" id="names">
+      <div class="container corr__inner">
+        <h2 class="section-title section-title--sm" data-i18n="names.title"></h2>
+        <button class="btn btn--grey" id="corrToggle" aria-expanded="false" aria-controls="corrPanel"><span data-i18n="names.button"></span> <span aria-hidden="true">↓</span></button>
+        <div class="corr__panel" id="corrPanel" hidden>
+          <input class="input corr__search" type="search" id="corrSearch" data-i18n-placeholder="names.placeholder" autocomplete="off">
+          <table class="corr__table">
+            <thead><tr><th data-i18n="names.old"></th><th data-i18n="names.now"></th></tr></thead>
+            <tbody id="corrRows"></tbody>
+          </table>
         </div>
-        <form class="form" id="contactForm" novalidate>
-          <fieldset class="form__types">
-            <legend class="mono" data-i18n="contact.want"></legend>
+      </div>
+    </section>
+
+    <!-- Contact band -->
+    <section class="contact-band" id="contact">
+      <div class="container contact-band__inner">
+        <h2 class="section-title section-title--sm" data-i18n="contact.title"></h2>
+        <p data-i18n="contact.text"></p>
+        <a class="btn btn--dark" href="https://www.gregoire-besson.com/sv/dealers">
+          <svg width="14" height="18" viewBox="0 0 14 18" aria-hidden="true"><path d="M7 0a7 7 0 0 0-7 7c0 5 7 11 7 11s7-6 7-11a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 7 4.5a2.5 2.5 0 0 1 0 5z" fill="currentColor"/></svg>
+          <span data-i18n="contact.dealers"></span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Request form -->
+    <section class="request">
+      <div class="container">
+        <h2 class="section-title section-title--sm" data-i18n="contact.formTitle"></h2>
+        <form class="request__box" id="requestForm" novalidate>
+          <fieldset class="request__types">
+            <legend><span data-i18n="contact.want"></span> <b class="req">*</b></legend>
             <div class="types" id="types"></div>
+            <p class="field-error" id="typeError" hidden data-i18n="contact.pickType"></p>
           </fieldset>
-          <div class="form__grid">
-            <label class="field"><span data-i18n="contact.firstname"></span><input name="firstname" required autocomplete="given-name"></label>
-            <label class="field"><span data-i18n="contact.lastname"></span><input name="lastname" required autocomplete="family-name"></label>
-            <label class="field"><span data-i18n="contact.email"></span><input name="email" type="email" required autocomplete="email"></label>
-            <label class="field"><span data-i18n="contact.phone"></span><input name="phone" type="tel" required autocomplete="tel"></label>
-            <label class="field"><span data-i18n="contact.zip"></span><input name="zip" required autocomplete="postal-code"></label>
-            <label class="field"><span data-i18n="contact.city"></span><input name="city" required autocomplete="address-level2"></label>
-            <label class="field"><span data-i18n="contact.country"></span><input name="country" required autocomplete="country-name"></label>
-            <label class="field"><span data-i18n="contact.machine"></span><input name="machine" id="machineField" list="machineList"><datalist id="machineList"></datalist></label>
-            <label class="field field--wide"><span data-i18n="contact.message"></span><textarea name="message" rows="4"></textarea></label>
+          <div class="request__grid">
+            <label class="field"><span><span data-i18n="contact.firstname"></span> <b class="req">*</b></span><input class="input" name="firstname" required autocomplete="given-name"></label>
+            <label class="field"><span><span data-i18n="contact.lastname"></span> <b class="req">*</b></span><input class="input" name="lastname" required autocomplete="family-name"></label>
+            <label class="field"><span><span data-i18n="contact.address"></span> <b class="req">*</b></span><input class="input" name="address" required autocomplete="street-address"></label>
+            <label class="field"><span><span data-i18n="contact.zip"></span> <b class="req">*</b></span><input class="input" name="zip" required autocomplete="postal-code"></label>
+            <label class="field"><span><span data-i18n="contact.city"></span> <b class="req">*</b></span><input class="input" name="city" required autocomplete="address-level2"></label>
+            <label class="field"><span><span data-i18n="contact.country"></span> <b class="req">*</b></span><input class="input" name="country" required autocomplete="country-name"></label>
+            <label class="field"><span><span data-i18n="contact.email"></span> <b class="req">*</b></span><input class="input" name="email" type="email" required autocomplete="email"></label>
+            <label class="field"><span><span data-i18n="contact.phone"></span> <b class="req">*</b></span><input class="input" name="phone" type="tel" required autocomplete="tel"></label>
+            <label class="field"><span data-i18n="contact.machine"></span><input class="input" name="machine" id="machineField" list="machineList"><datalist id="machineList"></datalist></label>
+            <label class="field field--wide"><span data-i18n="contact.message"></span><textarea class="input" name="message" rows="4"></textarea></label>
           </div>
-          <button class="btn btn--red btn--block" type="submit"><span data-i18n="contact.send"></span><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h12M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
-          <p class="form__ok" id="formOk" hidden role="status" data-i18n="contact.sent"></p>
+          <div class="request__send">
+            <button class="btn btn--red btn--send" type="submit" data-i18n="contact.send"></button>
+          </div>
+          <p class="request__ok" id="requestOk" hidden role="status" data-i18n="contact.sent"></p>
         </form>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <div class="wrap footer__top">
-      <div class="footer__brand">
-        <img src="assets/img/logo/logo-h.svg" alt="Grégoire Besson" width="188" height="28">
-        <p data-i18n="footer.tagline"></p>
-        <p class="mono footer__group"><span data-i18n="footer.group"></span> · <a href="https://gb-group.co">gb-group.co</a> · <a href="https://agriway.it">Agriway</a></p>
-      </div>
-      <div class="footer__col">
-        <h3 class="mono" data-i18n="nav.machines"></h3>
-        <ul id="footerSeries"></ul>
-      </div>
-      <div class="footer__col">
-        <h3 class="mono" data-i18n="footer.services"></h3>
-        <ul>
-          <li><a href="https://www.gregoire-besson.com/sv/parts-catalogues-manuals" data-i18n="footer.manuals"></a></li>
-          <li><a href="https://www.gregoire-besson.com/sv/video-tutorials" data-i18n="footer.videos"></a></li>
-          <li><a href="https://marketing.gb-group.co/gregoire-besson" data-i18n="footer.media"></a></li>
-          <li><a href="https://www.gregoire-besson.com/sv/dealers" data-i18n="nav.dealers"></a></li>
-        </ul>
-      </div>
-      <div class="footer__col">
-        <h3 class="mono">Social</h3>
-        <ul>
-          <li><a href="https://www.facebook.com/GregoireBessonSAS/">Facebook</a></li>
-          <li><a href="https://www.instagram.com/gregoire.besson/">Instagram</a></li>
-          <li><a href="https://www.youtube.com/c/GregoireBessonSASofficial/">YouTube</a></li>
-          <li><a href="https://www.linkedin.com/company/the-real-gb-group/">LinkedIn</a></li>
-          <li><a href="https://twitter.com/gbessonsas/">X / Twitter</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="wrap footer__bottom mono">
-      <span>© <span id="year"></span> Grégoire Besson. <span data-i18n="footer.rights"></span></span>
-      <ul class="footer__legal" id="legal"></ul>
+    <div class="container">
+      <div class="footer__cols" id="footerCols"></div>
+      <ul class="social">
+        <li><a href="https://www.facebook.com/GregoireBessonSAS/" aria-label="Facebook"><img src="assets/img/ui/facebook.svg" alt=""></a></li>
+        <li><a href="https://www.youtube.com/c/GregoireBessonSASofficial/" aria-label="YouTube"><img src="assets/img/ui/youtube.svg" alt=""></a></li>
+        <li><a href="https://www.linkedin.com/company/the-real-gb-group/" aria-label="LinkedIn"><img src="assets/img/ui/linkedin.svg" alt=""></a></li>
+        <li><a href="https://twitter.com/gbessonsas/" aria-label="Twitter"><img src="assets/img/ui/twitter.svg" alt=""></a></li>
+        <li><a href="https://www.instagram.com/gregoire.besson/" aria-label="Instagram"><img src="assets/img/ui/instagram.svg" alt=""></a></li>
+      </ul>
+      <ul class="legal" id="legal"></ul>
+      <p class="copyright">Copyright © <span id="year"></span> Gregoire Besson. <span data-i18n="footer.rights"></span></p>
     </div>
   </footer>
+
+  <!-- Model detail -->
+  <dialog class="modal" id="modal" aria-labelledby="modalTitle">
+    <div class="modal__inner" id="modalBody"></div>
+  </dialog>
 
   <script src="assets/js/models.js"></script>
   <script src="assets/js/i18n.js"></script>
