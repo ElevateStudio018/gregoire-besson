@@ -9,7 +9,8 @@ const LANGS = {
 
 const I18N = {
   sv: {
-    title: 'Grégoire Besson – Plogar, tallrikredskap, alvluckrare, jordbearbetning',
+    concept: { label: 'Konceptförslag', text: 'Det här är ett designförslag och inte Grégoire Bessons officiella webbplats. Formuläret skickar ingenting.', link: 'Till den officiella sajten' },
+    title: 'Konceptförslag – Grégoire Besson – Plogar, tallrikredskap, alvluckrare, jordbearbetning',
     metaDesc: 'Sedan 1802 konstruerar, monterar och distribuerar Grégoire Besson redskap för jordbearbetning. Plogar, tallrikredskap och pinnredskap för traktorer från 50 till 600 hk.',
     hp: 'hk',
     nav: { machines: 'Maskiner', services: 'Tjänster', manuals: 'Manualer, reservdelar…', videos: 'Instruktionsfilmer', media: 'Media – Marknadsföring', contact: 'Kontakt', dealers: 'Återförsäljare', menu: 'Meny' },
@@ -74,7 +75,8 @@ const I18N = {
   },
 
   en: {
-    title: 'Grégoire Besson – Plough, Stubble cultivator, Subsoiler, tillage',
+    concept: { label: 'Design concept', text: 'This is a redesign proposal, not Grégoire Besson’s official website. The form does not send anything.', link: 'Go to the official site' },
+    title: 'Design concept – Grégoire Besson – Plough, Stubble cultivator, Subsoiler, tillage',
     metaDesc: 'Since 1802, Grégoire Besson has been designing, assembling and distributing tillage equipment. Ploughs, disc and tine tools for tractors from 50 to 600 hp.',
     hp: 'hp',
     nav: { machines: 'Machines', services: 'Services', manuals: 'Manuals, Parts…', videos: 'Video tutorials', media: 'Media – Marketing', contact: 'Contact', dealers: 'Dealers', menu: 'Menu' },
@@ -139,7 +141,8 @@ const I18N = {
   },
 
   fr: {
-    title: 'Grégoire Besson – Charrue, Déchaumeur, Cover Crop, Décompacteur…',
+    concept: { label: 'Concept de design', text: 'Ceci est une proposition de refonte, pas le site officiel de Grégoire Besson. Le formulaire n’envoie rien.', link: 'Aller au site officiel' },
+    title: 'Concept de design – Grégoire Besson – Charrue, Déchaumeur, Cover Crop, Décompacteur…',
     metaDesc: 'Depuis 1802, nous concevons, assemblons et distribuons du matériel de travail du sol. Charrues, outils à disques et à dents pour tracteurs de 50 à 600 ch.',
     hp: 'ch',
     nav: { machines: 'Machines', services: 'Services', manuals: 'Manuels, Pièces…', videos: 'Tutoriels vidéo', media: 'Media – Marketing', contact: 'Contact', dealers: 'Concessionnaires', menu: 'Menu' },
@@ -204,7 +207,8 @@ const I18N = {
   },
 
   de: {
-    title: 'Grégoire Besson – Pflüge, Scheibeneggen, Grubber, Saatbettkombinationen',
+    concept: { label: 'Designkonzept', text: 'Dies ist ein Redesign-Vorschlag und nicht die offizielle Website von Grégoire Besson. Das Formular sendet nichts.', link: 'Zur offiziellen Website' },
+    title: 'Designkonzept – Grégoire Besson – Pflüge, Scheibeneggen, Grubber, Saatbettkombinationen',
     metaDesc: 'Seit 1802 entwerfen, montieren und vertreiben wir Bodenbearbeitungsgeräte. Pflüge, Scheibeneggen und Grubber für Traktoren von 50 bis 600 PS.',
     hp: 'PS',
     nav: { machines: 'Geräte', services: 'Dienstleistung', manuals: 'Bedienungsanleitungen, Teile…', videos: 'Video-Tutorials', media: 'Media – Marketing', contact: 'Kontakt', dealers: 'Händler', menu: 'Menü' },

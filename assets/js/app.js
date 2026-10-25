@@ -64,6 +64,7 @@
     renderCorr();
     renderTypes();
     renderFooter();
+    if ($('.concept')) syncConceptHeight();
   }
 
   /* ---------- Dropdowns (top bar, nav) ---------- */
@@ -336,6 +337,11 @@
     });
   }
 
+  /* ---------- Keep the navbar stuck just below the concept banner ---------- */
+  function syncConceptHeight() {
+    document.documentElement.style.setProperty('--concept-h', $('.concept').offsetHeight + 'px');
+  }
+
   /* ---------- Boot ---------- */
   $('#year').textContent = new Date().getFullYear();
   initDropdowns();
@@ -346,4 +352,6 @@
   initForm();
   initRangeLinks();
   setLang(initialLang());
+  syncConceptHeight();
+  addEventListener('resize', syncConceptHeight);
 })();
