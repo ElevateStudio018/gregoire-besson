@@ -12,8 +12,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital,wght@0,500;0,600;0,700;0,800;1,700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <link rel="stylesheet" href="assets/css/style.css">
+  <script>
+    // Preload the hero photo when the visitor lands on the home page
+    if (!location.hash || location.hash === '#/' || location.hash === '#') {
+      var l = document.createElement('link');
+      l.rel = 'preload'; l.as = 'image'; l.fetchPriority = 'high';
+      l.href = 'assets/img/field/hero-home-1280.jpg';
+      l.setAttribute('imagesrcset', 'assets/img/field/hero-home-800.jpg 800w, assets/img/field/hero-home-1280.jpg 1280w, assets/img/field/hero-home-1920.jpg 1920w');
+      l.setAttribute('imagesizes', '100vw');
+      document.head.appendChild(l);
+    }
+  </script>
 </head>
 <body>
   <a class="skip" href="#app">Skip to content</a>
@@ -64,7 +74,7 @@
       <div class="mega__inner">
         <div class="mega__cols" id="megaCols"></div>
         <aside class="mega__promo">
-          <img src="assets/img/field/hero-home.jpg" alt="" loading="lazy">
+          <img src="assets/img/field/hero-home-800.jpg" alt="" loading="lazy">
           <div>
             <p class="mega__promo-title" data-i18n="nav.megaCta"></p>
             <p data-i18n="nav.megaCtaText"></p>
@@ -105,7 +115,6 @@
     </div>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
   <script src="assets/js/models.js"></script>
   <script src="assets/js/i18n.js"></script>
   <script src="assets/data/content.js"></script>

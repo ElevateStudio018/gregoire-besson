@@ -216,8 +216,8 @@
 
   function renderFooter() {
     $('#footerCols').innerHTML = CATS.map((c) => `
-      <div><h3>${esc(T.cats[c])}</h3><ul>${SERIES.filter((s) => s.cat === c).map((s) => `<li><a href="#/serie/${s.id}">${esc(s.name)}</a></li>`).join('')}</ul></div>`).join('') +
-      `<div><h3>${esc(T.nav.services)}</h3><ul>
+      <div><h2>${esc(T.cats[c])}</h2><ul>${SERIES.filter((s) => s.cat === c).map((s) => `<li><a href="#/serie/${s.id}">${esc(s.name)}</a></li>`).join('')}</ul></div>`).join('') +
+      `<div><h2>${esc(T.nav.services)}</h2><ul>
         <li><a href="#/service">${esc(T.service.title)}</a></li>
         <li><a href="#/aterforsaljare">${esc(T.nav.dealers)}</a></li>
         <li><a href="#/kontakt">${esc(T.nav.contact)}</a></li>
@@ -259,6 +259,7 @@
     document.body.classList.toggle('no-hero', !out.hero);
     app.innerHTML = `<div class="page">${out.html || ''}</div>`;
     document.title = out.title ? `${out.title} – Grégoire Besson` : T.title;
+    $('meta[name="description"]').content = out.desc || T.metaDesc;
     $$('.nav [data-route]').forEach((a) => a.classList.toggle('is-active', a.dataset.route === out.nav));
     $('#megaBtn').classList.toggle('is-active', out.nav === 'machines');
     setSolid();
@@ -334,7 +335,7 @@
           if (!ms.length) return '';
           return `<div style="margin-bottom:36px">
             <div class="section__head" style="margin-bottom:16px;align-items:center">
-              <div><h3 class="h3">${esc(s.name)}</h3><p style="color:var(--muted);margin-top:4px">${esc(T.seriesFn[s.id])}</p></div>
+              <div><h2 class="h3">${esc(s.name)}</h2><p style="color:var(--muted);margin-top:4px">${esc(T.seriesFn[s.id])}</p></div>
               <a class="link-arrow" href="#/serie/${s.id}">${esc(T.series.see)} ${ICON.arrow}</a>
             </div>
             <div class="grid">${ms.map((m, i) => productCard(m, state.hp, i)).join('')}</div>
@@ -399,7 +400,7 @@
       hero: true,
       html: `
       <section class="hero">
-        <img class="hero__img" src="assets/img/field/hero-home.jpg" alt="" width="1900" height="960">
+        <img class="hero__img" src="assets/img/field/hero-home-1280.jpg" srcset="assets/img/field/hero-home-800.jpg 800w, assets/img/field/hero-home-1280.jpg 1280w, assets/img/field/hero-home-1920.jpg 1920w" sizes="100vw" alt="" width="1920" height="970" fetchpriority="high">
         <div class="hero__inner">
           <p class="eyebrow eyebrow--light">${esc(h.eyebrow)}</p>
           <h1 class="h1 hero__title">${esc(h.title)}</h1>
@@ -491,6 +492,7 @@
     return {
       nav: 'machines',
       title: T.machines.title,
+      desc: T.machines.text,
       html: `
       <header class="phead">
         <div class="wrap">
@@ -550,6 +552,7 @@
     return {
       nav: 'service',
       title: S.title,
+      desc: S.text,
       html: `
       <header class="phead">
         <div class="wrap">
@@ -646,6 +649,7 @@
       hero: true,
       nav: 'machines',
       title: `${s.name} – ${T.seriesFn[sid]}`,
+      desc: c.intro,
       html: `
       <section class="shero">
         <img class="shero__img" src="${hero}" alt="">
@@ -742,6 +746,7 @@
     return {
       nav: 'machines',
       title: m.name,
+      desc: `${m.name} – ${T.seriesFn[s.id]}. ${m.hp[0]}–${m.hp[1]} ${T.hp}, ${fmtWidth(m.width)}${configLine(m) ? `, ${configLine(m)}` : ''}.`,
       html: `
       <header class="phead" style="padding-bottom:0;background:none">
         <div class="wrap"><nav class="crumbs"><a href="#/">Grégoire Besson</a>${ICON.chev}<a href="#/maskiner">${esc(T.nav.machines)}</a>${ICON.chev}<a href="#/serie/${s.id}">${esc(s.name)}</a>${ICON.chev}<span>${esc(m.name)}</span></nav></div>
@@ -779,6 +784,22 @@
   }
 
   /* --- Dealers --- */
+  let leafletLoading = null;
+  function loadLeaflet() {
+    if (window.L) return Promise.resolve();
+    if (leafletLoading) return leafletLoading;
+    const base = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/';
+    const css = document.createElement('link');
+    css.rel = 'stylesheet'; css.href = base + 'leaflet.min.css';
+    document.head.appendChild(css);
+    leafletLoading = new Promise((resolve, reject) => {
+      const js = document.createElement('script');
+      js.src = base + 'leaflet.min.js'; js.onload = resolve; js.onerror = reject;
+      document.head.appendChild(js);
+    });
+    return leafletLoading;
+  }
+
   function viewDealers(r) {
     const q0 = r.query.get('q') || '';
     const land0 = r.query.has('land') ? r.query.get('land') : (q0 ? '' : DEFAULT_COUNTRY[state.lang]);
@@ -788,6 +809,7 @@
     return {
       nav: 'dealers',
       title: T.dealers.title,
+      desc: T.dealers.text,
       html: `
       <header class="phead" style="padding-bottom:28px">
         <div class="wrap">
@@ -879,7 +901,6 @@
           }
         };
         const initMap = () => {
-          if (!window.L) { setTimeout(initMap, 80); return; }
           if (!document.body.contains($('#dmap', app))) return;
           map = L.map($('#dmap', app), { zoomControl: true, scrollWheelZoom: true, preferCanvas: true }).setView([48.5, 10], 4);
           L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -914,7 +935,7 @@
           if (c && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); highlight(+c.dataset.i); }
         });
         filter();
-        initMap();
+        loadLeaflet().then(initMap).catch(() => {});
         return () => { if (map) { map.stop(); map.off(); map.remove(); map = null; } };
       },
     };
@@ -936,6 +957,7 @@
     return {
       nav: 'contact',
       title: C.title,
+      desc: C.text,
       html: `
       <header class="phead">
         <div class="wrap">

@@ -7,7 +7,7 @@
   --red-50: #fff1f2;
   --ink: #15171a;
   --text: #4f4f4f;
-  --muted: #7a7d82;
+  --muted: #626569;
   --line: #e7e7e4;
   --line-2: #efefec;
   --bg: #ffffff;
@@ -444,7 +444,7 @@ ul.model__hl { list-style: none; padding: 0; }
 .dealers__more { margin: 8px; }
 .dcard__rep { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: 12.5px; color: var(--muted); }
 .dcard__rep span { width: 100%; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; font-size: 11px; }
-.dcard__rep a { display: inline-flex; align-items: center; gap: 5px; color: var(--ink); }
+.dcard__rep a { display: inline-flex; align-items: center; gap: 5px; min-height: 28px; color: var(--ink); }
 .dcard__rep a:hover { color: var(--red); }
 .leaflet-tile-pane { filter: grayscale(1) contrast(.92) brightness(1.06); }
 .dealers__map { border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--line); background: var(--tile); min-height: 300px; }
@@ -526,7 +526,7 @@ a.sidecard:hover { background: var(--tile); transform: translateY(-2px); }
 .footer__brand img { width: 190px; margin-bottom: 18px; }
 .footer__brand p { max-width: 30ch; }
 .footer__cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-.footer h3 { font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #fff; margin-bottom: 14px; }
+.footer h2, .footer h3 { font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #fff; margin-bottom: 14px; }
 .footer ul { list-style: none; margin: 0; padding: 0; }
 .footer__cols li { margin-bottom: 9px; }
 .footer__cols a:hover, .footer__legal a:hover, .footer__bottom a:hover { color: #fff; }
@@ -558,7 +558,7 @@ a.sidecard:hover { background: var(--tile); transform: translateY(-2px); }
 }
 @media (max-width: 720px) {
   :root { --header-h: 64px; }
-  .header__logo { width: 150px; height: 22px; }
+  .header__logo { width: 150px; }
   .hero__stats { grid-template-columns: repeat(2, 1fr); gap: 18px 0; }
   .hero__ctas .btn { flex: 1 1 auto; }
   .finder__top { grid-template-columns: 1fr; gap: 6px; }
@@ -599,4 +599,14 @@ a.sidecard:hover { background: var(--tile); transform: translateY(-2px); }
 }
 
 /* Jump targets on range pages land below the sticky header + range sub-navigation */
-#models, .block { scroll-margin-top: calc(var(--concept-h) + var(--header-h) + 60px); }
+#models, .block { scroll-margin-top: 60px; } /* html scroll-padding already covers the banner + header */
+
+/* Minimum 24px touch targets (WCAG 2.2 target size) for small inline controls */
+.slider__ticks button { min-width: 32px; min-height: 28px; }
+.crumbs a { display: inline-flex; align-items: center; min-height: 28px; }
+.fcard__more { min-height: 32px; }
+.header__logo, :root .header__logo { height: 44px; }
+.header__logo img { top: 50%; bottom: auto; transform: translateY(-50%); }
+.footer__cols a, .footer__legal a, .footer__bottom a { display: inline-flex; align-items: center; min-height: 28px; }
+.footer__cols li { margin-bottom: 2px; }
+.mega__all, .link-arrow { min-height: 32px; }
