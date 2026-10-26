@@ -25,12 +25,8 @@
     'https://marketing.cellar-c2.services.clever-cloud.com/Legal_information/cookies_management_policy.pdf',
   ];
   const DEFAULT_COUNTRY = { sv: 'SE', fr: 'FR', de: 'DE', en: '' };
-  const EXT = {
-    // the original site's /sv pages render untranslated keys, so Swedish visitors get the English pages
-    manuals: () => `https://www.gregoire-besson.com/${state.lang === 'sv' ? 'en' : state.lang}/parts-catalogues-manuals`,
-    youtube: 'https://www.youtube.com/c/GregoireBessonSASofficial/',
-    media: 'https://marketing.gb-group.co/gregoire-besson',
-  };
+  const MARKETING_MAIL = 'france.marketing@gb-group.co';
+  const DOC_LANGS = ['en', 'fr', 'de', 'it'];
   const flag = (l) => `assets/img/flags/${l}.svg`;
   const EXTRA_COUNTRIES = ['SE', 'NO', 'DK', 'FI', 'NL', 'IE', 'CH', 'PT', 'GR', 'TR', 'BY', 'KZ'];
 
@@ -64,6 +60,8 @@
     quote: '<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15H6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 2v6h6M9 13h8M9 17h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
     media: '<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 9l5 3-5 3z" fill="currentColor"/></svg>',
     ext: '<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3H3v10h10v-3M9 2h5v5M14 2L7 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    download: '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    play: '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>',
     wrench: '<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.1L3.5 17.2a1.8 1.8 0 0 0 2.5 2.5l5.8-5.8a4 4 0 0 0 5.1-5.4l-2.6 2.6-2.3-.4-.4-2.3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
   };
 
@@ -221,9 +219,9 @@
         <li><a href="#/service">${esc(T.service.title)}</a></li>
         <li><a href="#/aterforsaljare">${esc(T.nav.dealers)}</a></li>
         <li><a href="#/kontakt">${esc(T.nav.contact)}</a></li>
-        <li><a href="${EXT.manuals()}" target="_blank" rel="noopener">${esc(T.nav.manuals)}</a></li>
-        <li><a href="${EXT.youtube}" target="_blank" rel="noopener">${esc(T.nav.videos)}</a></li>
-        <li><a href="${EXT.media}" target="_blank" rel="noopener">${esc(T.nav.media)}</a></li>
+        <li><a href="#/service/manualer">${esc(T.service.sub.manuals.title)}</a></li>
+        <li><a href="#/service/filmer">${esc(T.service.sub.videos.title)}</a></li>
+        <li><a href="#/service/media">${esc(T.service.sub.media.title)}</a></li>
       </ul></div>`;
     $('#legal').innerHTML = T.footer.legal.map((l, i) => `<li><a href="${LEGAL[i]}">${esc(l)}</a></li>`).join('');
   }
@@ -540,13 +538,17 @@
   }
 
   /* --- Service --- */
-  function viewService() {
+  const SUBPAGES = { manualer: viewManuals, filmer: viewVideos, media: viewMedia };
+
+  function viewService(r) {
+    const sub = r.parts[1];
+    if (sub) return SUBPAGES[sub] ? SUBPAGES[sub](r) : viewNotFound();
     const S = T.service;
     const cards = [
-      { href: EXT.manuals(), ext: true, icon: ICON.wrench },
-      { href: EXT.youtube, ext: true, icon: ICON.media },
+      { href: '#/service/manualer', icon: ICON.wrench },
+      { href: '#/service/filmer', icon: ICON.media },
       { href: '#/aterforsaljare', icon: ICON.pin },
-      { href: EXT.media, ext: true, icon: ICON.book },
+      { href: '#/service/media', icon: ICON.book },
       { href: '#/kontakt', icon: ICON.call },
     ];
     return {
@@ -564,19 +566,233 @@
       </header>
       <section class="section" style="padding-top:40px">
         <div class="wrap svc">
-          ${S.cards.map(([t, d], i) => {
-            const c = cards[i];
-            return `<a class="svc__card reveal" href="${c.href}" ${c.ext ? 'target="_blank" rel="noopener"' : ''}>
-              <span class="svc__icon">${c.icon}</span>
+          ${S.cards.map(([t, d], i) => `<a class="svc__card reveal" href="${cards[i].href}">
+              <span class="svc__icon">${cards[i].icon}</span>
               <span class="svc__text"><b>${esc(t)}</b><span>${esc(d)}</span></span>
-              <span class="svc__go" ${c.ext ? `title="${esc(S.external)}"` : ''}>${c.ext ? ICON.ext : ICON.arrow}</span>
-            </a>`;
-          }).join('')}
+              <span class="svc__go">${ICON.arrow}</span>
+            </a>`).join('')}
         </div>
       </section>
       ${namesHTML()}`,
       mount(app) { mountNames(app); },
     };
+  }
+
+  function subHead(title, text) {
+    return `<header class="phead">
+        <div class="wrap">
+          <nav class="crumbs"><a href="#/">Grégoire Besson</a>${ICON.chev}<a href="#/service">${esc(T.nav.services)}</a>${ICON.chev}<span>${esc(title)}</span></nav>
+          <p class="eyebrow">${esc(T.service.eyebrow)}</p>
+          <h1 class="h1">${esc(title)}</h1>
+          <p class="lead">${esc(text)}</p>
+        </div>
+      </header>`;
+  }
+
+  // documents come in the languages Grégoire Besson publishes; Swedish visitors get English first
+  function docLangs(d) {
+    const pref = state.lang === 'sv' ? 'en' : state.lang;
+    return [pref, ...DOC_LANGS.filter((l) => l !== pref)].filter((l) => d.files[l]);
+  }
+  const docsFor = (sid) => DOCS.filter((d) => d.series.includes(sid));
+  const videosFor = (sid) => VIDEOS.filter((v) => v.series === sid);
+
+  function docLinks(d) {
+    const [first, ...rest] = docLangs(d);
+    return `<div class="doc__dl">
+        <a class="btn btn--red btn--sm" href="${d.files[first]}" target="_blank" rel="noopener">${ICON.download} PDF · ${first.toUpperCase()}</a>
+        ${rest.map((l) => `<a class="doc__lang" href="${d.files[l]}" target="_blank" rel="noopener" aria-label="PDF ${l.toUpperCase()}">${l.toUpperCase()}</a>`).join('')}
+      </div>`;
+  }
+
+  function docCard(d, title, text, img) {
+    return `<article class="doc reveal">
+        <div class="doc__img">${img ? `<img src="${img}" alt="" loading="lazy">` : `<img class="doc__logo" src="assets/img/logo/logo-h-red.svg" alt="">`}</div>
+        <div class="doc__body">
+          <h3>${esc(title)}</h3>
+          ${text ? `<p>${esc(text)}</p>` : ''}
+          ${docLinks(d)}
+        </div>
+      </article>`;
+  }
+
+  /* Manuals & spare parts */
+  function viewManuals() {
+    const M = T.service.sub.manuals;
+    const parts = DOCS.find((d) => d.kind === 'parts');
+    return {
+      nav: 'service',
+      title: M.title,
+      desc: M.text,
+      html: `
+      ${subHead(M.title, M.text)}
+      <section class="section" style="padding-top:40px">
+        <div class="wrap manuals">
+          <div>
+            <label class="searchbar">${ICON.search}<input id="manSearch" placeholder="${esc(M.search)}" autocomplete="off" aria-label="${esc(M.search)}"></label>
+            <div class="manuals__list" id="manList"></div>
+          </div>
+          <aside class="side">
+            ${docCard(parts, M.partsTitle, M.partsText, 'assets/img/models/discordon-t80.jpg')}
+            <a class="sidecard" href="#/kontakt?typ=3"><span class="sidecard__icon">${ICON.wrench}</span><div><b>${esc(M.request)}</b><span>${esc(T.contact.types[3])}</span></div></a>
+            <p class="note" style="margin:0">${esc(M.launch)}</p>
+          </aside>
+        </div>
+      </section>`,
+      mount(app) {
+        const list = $('#manList', app);
+        const norm = (t) => t.toLowerCase().replace(/[\s,./()+–-]+/g, '');
+        const draw = (q) => {
+          const v = norm(q);
+          // old names point at a current model name
+          const viaOld = v ? OLD_NAMES.filter(([o]) => norm(o).includes(v)).map(([, n]) => norm(n)) : [];
+          const rows = SERIES.map((s) => {
+            const ms = modelsOf(s.id);
+            const hitSeries = !v || norm(s.name).includes(v) || norm(T.seriesFn[s.id]).includes(v);
+            const hits = v ? ms.filter((m) => norm(m.name).includes(v) || viaOld.some((n) => norm(m.name) === n || norm(m.name).startsWith(n))) : [];
+            return { s, ms, hits, show: hitSeries || hits.length };
+          }).filter((x) => x.show);
+          list.innerHTML = rows.length ? rows.map(({ s, ms, hits }) => {
+            const doc = docsFor(s.id)[0];
+            const nv = videosFor(s.id).length;
+            return `<article class="mcard">
+              <img src="assets/img/models/${ms[0].id}.jpg" alt="" loading="lazy" width="500" height="333">
+              <div class="mcard__body">
+                <h2 class="h3">${esc(s.name)} <span>${esc(T.seriesFn[s.id])}</span></h2>
+                <div class="mcard__models">${ms.map((m) => `<a class="chip ${hits.includes(m) ? 'chip--red' : ''}" href="#/kontakt?typ=3&maskin=${m.id}">${esc(m.name)}</a>`).join('')}</div>
+                <div class="mcard__actions">
+                  <a class="btn btn--red btn--sm" href="#/kontakt?typ=3&serie=${s.id}">${ICON.wrench} ${esc(M.request)}</a>
+                  ${doc ? `<a class="btn btn--line btn--sm" href="${doc.files[docLangs(doc)[0]]}" target="_blank" rel="noopener">${ICON.download} ${esc(M.catalogue)} · ${docLangs(doc)[0].toUpperCase()}</a>` : ''}
+                  ${nv ? `<a class="btn btn--line btn--sm" href="#/service/filmer?serie=${s.id}">${ICON.media} ${esc(M.videos)} (${nv})</a>` : ''}
+                </div>
+              </div>
+            </article>`;
+          }).join('') : `<div class="empty">${esc(M.empty)}</div>`;
+        };
+        $('#manSearch', app).addEventListener('input', (e) => draw(e.target.value));
+        draw('');
+      },
+    };
+  }
+
+  /* Videos */
+  const videoTitle = (t) => t.split(/\s+[-–|]\s+/).filter((x) => !/^gr[ée]goire[\s-]besson$/i.test(x.trim())).join(' · ');
+
+  function videoCard(v) {
+    const s = seriesById[v.series];
+    return `<article class="vcard reveal" data-series="${v.series}">
+        <button class="vcard__media" type="button" data-video="${v.id}" aria-label="${esc(T.service.sub.videos.play)}: ${esc(videoTitle(v.title))}">
+          <img src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">
+          <span class="vcard__play">${ICON.play}</span>
+        </button>
+        <div class="vcard__body">
+          ${s ? `<a class="chip chip--red" href="#/serie/${s.id}">${esc(s.name)}</a>` : ''}
+          <h3>${esc(videoTitle(v.title))}</h3>
+        </div>
+      </article>`;
+  }
+
+  // swap the thumbnail for the player only when the visitor asks for it
+  function mountVideos(root) {
+    root.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-video]');
+      if (!b) return;
+      const f = document.createElement('iframe');
+      f.src = `https://www.youtube-nocookie.com/embed/${b.dataset.video}?autoplay=1&rel=0`;
+      f.title = b.getAttribute('aria-label');
+      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      f.allowFullscreen = true;
+      f.className = 'vcard__frame';
+      b.replaceWith(f);
+    });
+  }
+
+  function viewVideos(r) {
+    const V = T.service.sub.videos;
+    const ids = SERIES.map((s) => s.id).filter((id) => videosFor(id).length);
+    let cur = ids.includes(r.query.get('serie')) ? r.query.get('serie') : 'all';
+    return {
+      nav: 'service',
+      title: V.title,
+      desc: V.text,
+      html: `
+      ${subHead(V.title, V.text)}
+      <section class="section" style="padding-top:40px">
+        <div class="wrap">
+          <div class="vbar">
+            <div class="seg" role="group">${['all', ...ids].map((id) => `<button type="button" data-vs="${id}" aria-pressed="${cur === id}">${esc(id === 'all' ? V.all : seriesById[id].name)}</button>`).join('')}</div>
+            <span class="finder__count" id="vCount"></span>
+          </div>
+          <div class="vgrid" id="vGrid"></div>
+        </div>
+      </section>`,
+      mount(app) {
+        const grid = $('#vGrid', app);
+        const draw = () => {
+          const vs = VIDEOS.filter((v) => cur === 'all' || v.series === cur);
+          grid.innerHTML = vs.map(videoCard).join('');
+          $('#vCount', app).innerHTML = `<b>${vs.length}</b> ${esc(V.count(vs.length).replace(/^\d+\s*/, ''))}`;
+          observeReveals();
+        };
+        app.addEventListener('click', (e) => {
+          const b = e.target.closest('[data-vs]');
+          if (!b) return;
+          cur = b.dataset.vs;
+          $$('[data-vs]', app).forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+          history.replaceState(null, '', cur === 'all' ? '#/service/filmer' : `#/service/filmer?serie=${cur}`);
+          state.route = location.hash;
+          draw();
+        });
+        mountVideos(app);
+        draw();
+      },
+    };
+  }
+
+  /* Media & brochures */
+  function viewMedia() {
+    const D = T.service.sub.media;
+    const one = (k) => DOCS.find((d) => d.kind === k);
+    const cats = DOCS.filter((d) => d.kind === 'catalogue');
+    const img = (d) => (d.series[0] ? `assets/img/models/${modelsOf(d.series[0])[0].id}.jpg` : '');
+    const fns = (d) => [...new Set(d.series.map((id) => T.seriesFn[id]))].join(' · ');
+    return {
+      nav: 'service',
+      title: D.title,
+      desc: D.text,
+      html: `
+      ${subHead(D.title, D.text)}
+      <section class="section" style="padding-top:40px">
+        <div class="wrap">
+          <h2 class="h3 media__h">${esc(D.essentials)}</h2>
+          <div class="docs">
+            ${docCard(one('price'), D.price, D.priceText, 'assets/img/models/voyager-c80.jpg')}
+            ${docCard(one('range'), D.range, D.rangeText, 'assets/img/models/occitan-t60.jpg')}
+            ${docCard(one('parts'), D.parts, D.partsText, 'assets/img/models/discordon-t80.jpg')}
+          </div>
+          <h2 class="h3 media__h">${esc(D.catalogues)}</h2>
+          <div class="docs">
+            ${cats.map((d) => docCard(d, d.name, fns(d), img(d))).join('')}
+          </div>
+          <a class="sidecard media__press" href="mailto:${MARKETING_MAIL}"><span class="sidecard__icon">${ICON.mail}</span><div><b>${esc(D.press)}</b><span>${esc(D.pressText)} ${MARKETING_MAIL}</span></div></a>
+        </div>
+      </section>`,
+    };
+  }
+
+  // brochures and videos on each series page
+  function seriesMediaHTML(sid) {
+    const docs = docsFor(sid), vids = videosFor(sid);
+    if (!docs.length && !vids.length) return '';
+    const V = T.service.sub.videos;
+    return `<section class="section" id="media">
+        <div class="wrap">
+          <div class="section__head reveal"><div><p class="eyebrow">${esc(seriesById[sid].name)}</p><h2 class="h2">${esc(vids.length ? V.title : T.service.sub.media.docs)}</h2></div>
+            ${vids.length ? `<a class="link-arrow" href="#/service/filmer?serie=${sid}">${esc(V.more)} ${ICON.arrow}</a>` : ''}</div>
+          ${vids.length ? `<div class="vgrid">${vids.slice(0, 3).map(videoCard).join('')}</div>` : ''}
+          ${docs.map((d) => `<div class="sdoc reveal"><span class="doc__icon">${ICON.book}</span><div><b>${esc(T.service.sub.manuals.catalogue)} ${esc(d.name)}</b></div>${docLinks(d)}</div>`).join('')}
+        </div>
+      </section>`;
   }
 
   /* --- Series page --- */
@@ -695,6 +911,7 @@
 
       ${T.series.contentNote ? `<div class="wrap"><p class="note">${esc(T.series.contentNote)}</p></div>` : ''}
       ${sections.join('')}
+      ${seriesMediaHTML(sid)}
 
       <section class="section" style="padding-top:24px">
         <div class="wrap">
@@ -727,6 +944,7 @@
           });
         }, { rootMargin: '-40% 0px -55% 0px' });
         targets.forEach((t) => io.observe(t));
+        mountVideos(app);
         return () => io.disconnect();
       },
     };
@@ -946,7 +1164,7 @@
     const typ = r.query.has('typ') ? +r.query.get('typ') : null;
     const pre = r.query.get('maskin') ? modelById[r.query.get('maskin')]?.name : (r.query.get('serie') ? seriesById[r.query.get('serie')]?.name : '');
     const C = T.contact;
-    const icons = [ICON.book, ICON.call, ICON.quote];
+    const icons = [ICON.book, ICON.call, ICON.quote, ICON.wrench];
     const ccs = [...new Set([...DEALERS.map((d) => d[4]), ...EXTRA_COUNTRIES])].sort((a, b) => countryName(a).localeCompare(countryName(b), LOCALE[state.lang]));
     const defCC = DEFAULT_COUNTRY[state.lang] || '';
     const field = (name, label, type = 'text', req = true, ac = '') => `
@@ -1006,7 +1224,7 @@
           </form>
           <aside class="side">
             <a class="sidecard sidecard--img" href="#/aterforsaljare"><img src="${seriesCover('voyager')}" alt="" loading="lazy"><div><b>${esc(C.sideDealer)}</b><span>${esc(C.sideDealerText)}</span></div></a>
-            <a class="sidecard" href="${EXT.media}" target="_blank" rel="noopener"><span class="sidecard__icon">${ICON.media}</span><div><b>${esc(C.sideMedia)}</b><span>${esc(C.sideMediaText)}</span></div></a>
+            <a class="sidecard" href="#/service/media"><span class="sidecard__icon">${ICON.media}</span><div><b>${esc(C.sideMedia)}</b><span>${esc(C.sideMediaText)}</span></div></a>
             <div class="sidecard" style="flex-direction:column;align-items:flex-start"><b>${esc(C.sideFollow)}</b>${$('.footer .social').outerHTML}</div>
           </aside>
         </div>
