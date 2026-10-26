@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="sv">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -38,26 +38,16 @@
           <svg class="chev" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <a class="nav__link" href="#/aterforsaljare" data-route="dealers" data-i18n="nav.dealers"></a>
-        <div class="nav__more">
-          <button class="nav__link" id="servBtn" aria-expanded="false" aria-controls="servMenu">
-            <span data-i18n="nav.services"></span>
-            <svg class="chev" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="pop pop--menu" id="servMenu" hidden>
-            <a href="https://www.gregoire-besson.com/sv/parts-catalogues-manuals"><span class="ico">⚙</span><span data-i18n="nav.manuals"></span></a>
-            <a href="https://www.gregoire-besson.com/sv/video-tutorials"><span class="ico">▶</span><span data-i18n="nav.videos"></span></a>
-            <a href="https://marketing.gb-group.co/gregoire-besson"><span class="ico">◧</span><span data-i18n="nav.media"></span></a>
-            <a href="https://gb-group.co"><span class="ico">↗</span><span data-i18n="nav.group"></span></a>
-          </div>
-        </div>
+        <a class="nav__link" href="#/service" data-route="service" data-i18n="nav.services"></a>
         <a class="nav__link" href="#/kontakt" data-route="contact" data-i18n="nav.contact"></a>
       </nav>
 
       <div class="header__end">
         <div class="lang">
           <button class="lang__btn" id="langBtn" aria-expanded="false" aria-controls="langMenu">
-            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.25" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2.75 12h18.5M12 2.75c2.6 2.6 3.9 5.7 3.9 9.25S14.6 18.65 12 21.25C9.4 18.65 8.1 15.55 8.1 12S9.4 5.35 12 2.75z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
-            <span id="langCode">SV</span>
+            <img class="flag" id="langFlag" src="assets/img/flags/en.svg" alt="" width="20" height="20">
+            <span id="langCode">EN</span>
+            <svg class="chev" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <div class="pop pop--lang" id="langMenu" hidden>
             <p class="pop__label" data-i18n="nav.language"></p>

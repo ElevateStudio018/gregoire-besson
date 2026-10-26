@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grégoire Besson</title>
+  <meta name="description" content="">
+  <meta name="theme-color" content="#e2001a">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/img/logo/apple-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- Concept disclaimer: this is a redesign proposal, not the official site -->
+  <div class="concept" role="note">
+    <strong data-i18n="concept.label"></strong>
+    <span data-i18n="concept.text"></span>
+    <a href="https://www.gregoire-besson.com" data-i18n="concept.link"></a>
+  </div>
+
+  <!-- Top bar: GB Group + language (same pattern as the current site) -->
+  <div class="topbar">
+    <div class="container topbar__inner">
+      <div class="dd" data-dd>
+        <button class="dd__btn" aria-expanded="false">GB Group <i class="caret" aria-hidden="true"></i></button>
+        <ul class="dd__menu" hidden>
+          <li><a href="https://gb-group.co">GB Group</a></li>
+          <li><a href="https://agriway.it">Agriway</a></li>
+        </ul>
+      </div>
+      <div class="dd dd--right" data-dd>
+        <button class="dd__btn" aria-expanded="false" id="langBtn"><span id="langCurrent">Svenska</span> <i class="caret" aria-hidden="true"></i></button>
+        <ul class="dd__menu" hidden id="langList"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Red navbar -->
+  <header class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <a class="navbar__brand" href="#top" aria-label="Grégoire Besson">
+        <img src="assets/img/logo/logo-h.svg" alt="Grégoire Besson" width="164" height="25">
+      </a>
+      <button class="navbar__toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">
+        <span></span><span></span><span></span><span class="sr" data-i18n="nav.menu"></span>
+      </button>
+      <nav class="navbar__nav" id="navMenu" aria-label="Main">
+        <div class="navitem navitem--mega" data-dd>
+          <button class="navlink dd__btn" aria-expanded="false"><span data-i18n="nav.machines"></span> <i class="caret" aria-hidden="true"></i></button>
+          <div class="mega dd__menu" hidden>
+            <div class="container mega__grid" id="megaMenu"></div>
+          </div>
+        </div>
+        <div class="navitem" data-dd>
+          <button class="navlink dd__btn" aria-expanded="false"><span data-i18n="nav.services"></span> <i class="caret" aria-hidden="true"></i></button>
+          <ul class="dd__menu dd__menu--nav" hidden>
+            <li><a href="https://www.gregoire-besson.com/sv/parts-catalogues-manuals" data-i18n="nav.manuals"></a></li>
+            <li><a href="https://www.gregoire-besson.com/sv/video-tutorials" data-i18n="nav.videos"></a></li>
+          </ul>
+        </div>
+        <a class="navlink" href="https://marketing.gb-group.co/gregoire-besson" data-i18n="nav.media"></a>
+        <a class="navlink" href="#contact" data-i18n="nav.contact"></a>
+        <a class="navlink" href="https://www.gregoire-besson.com/sv/dealers" data-i18n="nav.dealers"></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero" id="top">
+      <img class="hero__img" src="assets/img/field/hero-home.jpg" alt="" width="1900" height="960">
+      <div class="hero__inner container">
+        <h1 class="hero__title" data-i18n="hero.title"></h1>
+        <p class="hero__text" data-i18n="hero.text"></p>
+        <div class="hero__ctas">
+          <a class="btn btn--red btn--lg" href="#power" data-i18n="hero.cta"></a>
+          <a class="btn btn--outline-light btn--lg" href="#contact" data-i18n="hero.cta2"></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Power selector -->
+    <section class="power" id="power">
+      <div class="container">
+        <h2 class="section-title" data-i18n="power.title"></h2>
+        <div class="power__box">
+          <p class="power__text" data-i18n="power.text"></p>
+          <div class="power__slider">
+            <img class="power__icon" src="assets/img/ui/tractor-small.jpg" alt="" width="42" height="32">
+            <div class="range" id="range">
+              <div class="range__track"><div class="range__fill" id="rangeFill"></div></div>
+              <input type="range" id="hpMin" min="50" max="600" step="5" value="50" aria-label="Min">
+              <input type="range" id="hpMax" min="50" max="600" step="5" value="600" aria-label="Max">
+              <output class="range__label" id="labelMin"></output>
+              <output class="range__label" id="labelMax"></output>
+            </div>
+            <img class="power__icon power__icon--lg" src="assets/img/ui/tractor-large.jpg" alt="" width="56" height="37">
+          </div>
+          <div class="power__foot">
+            <div class="pills" id="catPills" role="tablist"></div>
+            <p class="power__count" id="powerCount" aria-live="polite"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ranges / product grid -->
+    <section class="ranges" id="machines">
+      <div class="container" id="ranges"></div>
+      <p class="container ranges__none" id="rangesNone" hidden data-i18n="power.none"></p>
+    </section>
+
+    <!-- Correspondence -->
+    <section class="corr" id="names">
+      <div class="container corr__inner">
+        <h2 class="section-title section-title--sm" data-i18n="names.title"></h2>
+        <button class="btn btn--grey" id="corrToggle" aria-expanded="false" aria-controls="corrPanel"><span data-i18n="names.button"></span> <span aria-hidden="true">↓</span></button>
+        <div class="corr__panel" id="corrPanel" hidden>
+          <input class="input corr__search" type="search" id="corrSearch" data-i18n-placeholder="names.placeholder" autocomplete="off">
+          <table class="corr__table">
+            <thead><tr><th data-i18n="names.old"></th><th data-i18n="names.now"></th></tr></thead>
+            <tbody id="corrRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact band -->
+    <section class="contact-band" id="contact">
+      <div class="container contact-band__inner">
+        <h2 class="section-title section-title--sm" data-i18n="contact.title"></h2>
+        <p data-i18n="contact.text"></p>
+        <a class="btn btn--dark" href="https://www.gregoire-besson.com/sv/dealers">
+          <svg width="14" height="18" viewBox="0 0 14 18" aria-hidden="true"><path d="M7 0a7 7 0 0 0-7 7c0 5 7 11 7 11s7-6 7-11a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 7 4.5a2.5 2.5 0 0 1 0 5z" fill="currentColor"/></svg>
+          <span data-i18n="contact.dealers"></span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Request form -->
+    <section class="request">
+      <div class="container">
+        <h2 class="section-title section-title--sm" data-i18n="contact.formTitle"></h2>
+        <form class="request__box" id="requestForm" novalidate>
+          <fieldset class="request__types">
+            <legend><span data-i18n="contact.want"></span> <b class="req">*</b></legend>
+            <div class="types" id="types"></div>
+            <p class="field-error" id="typeError" hidden data-i18n="contact.pickType"></p>
+          </fieldset>
+          <div class="request__grid">
+            <label class="field"><span><span data-i18n="contact.firstname"></span> <b class="req">*</b></span><input class="input" name="firstname" required autocomplete="given-name"></label>
+            <label class="field"><span><span data-i18n="contact.lastname"></span> <b class="req">*</b></span><input class="input" name="lastname" required autocomplete="family-name"></label>
+            <label class="field"><span><span data-i18n="contact.address"></span> <b class="req">*</b></span><input class="input" name="address" required autocomplete="street-address"></label>
+            <label class="field"><span><span data-i18n="contact.zip"></span> <b class="req">*</b></span><input class="input" name="zip" required autocomplete="postal-code"></label>
+            <label class="field"><span><span data-i18n="contact.city"></span> <b class="req">*</b></span><input class="input" name="city" required autocomplete="address-level2"></label>
+            <label class="field"><span><span data-i18n="contact.country"></span> <b class="req">*</b></span><input class="input" name="country" required autocomplete="country-name"></label>
+            <label class="field"><span><span data-i18n="contact.email"></span> <b class="req">*</b></span><input class="input" name="email" type="email" required autocomplete="email"></label>
+            <label class="field"><span><span data-i18n="contact.phone"></span> <b class="req">*</b></span><input class="input" name="phone" type="tel" required autocomplete="tel"></label>
+            <label class="field"><span data-i18n="contact.machine"></span><input class="input" name="machine" id="machineField" list="machineList"><datalist id="machineList"></datalist></label>
+            <label class="field field--wide"><span data-i18n="contact.message"></span><textarea class="input" name="message" rows="4"></textarea></label>
+          </div>
+          <div class="request__send">
+            <button class="btn btn--red btn--send" type="submit" data-i18n="contact.send"></button>
+          </div>
+          <p class="request__ok" id="requestOk" hidden role="status" data-i18n="contact.sent"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__cols" id="footerCols"></div>
+      <ul class="social">
+        <li><a href="https://www.facebook.com/GregoireBessonSAS/" aria-label="Facebook"><img src="assets/img/ui/facebook.svg" alt=""></a></li>
+        <li><a href="https://www.youtube.com/c/GregoireBessonSASofficial/" aria-label="YouTube"><img src="assets/img/ui/youtube.svg" alt=""></a></li>
+        <li><a href="https://www.linkedin.com/company/the-real-gb-group/" aria-label="LinkedIn"><img src="assets/img/ui/linkedin.svg" alt=""></a></li>
+        <li><a href="https://twitter.com/gbessonsas/" aria-label="Twitter"><img src="assets/img/ui/twitter.svg" alt=""></a></li>
+        <li><a href="https://www.instagram.com/gregoire.besson/" aria-label="Instagram"><img src="assets/img/ui/instagram.svg" alt=""></a></li>
+      </ul>
+      <ul class="legal" id="legal"></ul>
+      <p class="copyright">Copyright © <span id="year"></span> Gregoire Besson. <span data-i18n="footer.rights"></span></p>
+    </div>
+  </footer>
+
+  <!-- Model detail -->
+  <dialog class="modal" id="modal" aria-labelledby="modalTitle">
+    <div class="modal__inner" id="modalBody"></div>
+  </dialog>
+
+  <script src="assets/js/models.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

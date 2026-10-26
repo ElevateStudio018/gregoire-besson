@@ -25,6 +25,13 @@
     'https://marketing.cellar-c2.services.clever-cloud.com/Legal_information/cookies_management_policy.pdf',
   ];
   const DEFAULT_COUNTRY = { sv: 'SE', fr: 'FR', de: 'DE', en: '' };
+  const EXT = {
+    // the original site's /sv pages render untranslated keys, so Swedish visitors get the English pages
+    manuals: () => `https://www.gregoire-besson.com/${state.lang === 'sv' ? 'en' : state.lang}/parts-catalogues-manuals`,
+    youtube: 'https://www.youtube.com/c/GregoireBessonSASofficial/',
+    media: 'https://marketing.gb-group.co/gregoire-besson',
+  };
+  const flag = (l) => `assets/img/flags/${l}.svg`;
   const EXTRA_COUNTRIES = ['SE', 'NO', 'DK', 'FI', 'NL', 'IE', 'CH', 'PT', 'GR', 'TR', 'BY', 'KZ'];
 
   const seriesById = Object.fromEntries(SERIES.map((s) => [s.id, s]));
@@ -56,10 +63,12 @@
     call: '<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
     quote: '<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15H6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 2v6h6M9 13h8M9 17h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
     media: '<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 9l5 3-5 3z" fill="currentColor"/></svg>',
+    ext: '<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3H3v10h10v-3M9 2h5v5M14 2L7 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    wrench: '<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.1L3.5 17.2a1.8 1.8 0 0 0 2.5 2.5l5.8-5.8a4 4 0 0 0 5.1-5.4l-2.6 2.6-2.3-.4-.4-2.3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
   };
 
-  const state = { lang: 'sv', hp: 180, cat: 'all', route: null };
-  let T = I18N.sv;
+  const state = { lang: 'en', hp: 180, cat: 'all', route: null };
+  let T = I18N.en;
 
   const content = (id) => (window.CONTENT[state.lang === 'de' ? 'en' : state.lang] || window.CONTENT.en)[id];
   const seriesCover = (id) => {
@@ -88,8 +97,8 @@
   function initialLang() {
     const q = new URLSearchParams(location.search).get('lang');
     if (q && I18N[q]) return q;
-    try { const s = localStorage.getItem('gb-lang'); if (s && I18N[s]) return s; } catch (e) {}
-    return 'sv';
+    try { const s = localStorage.getItem('gb-lang-v2'); if (s && I18N[s]) return s; } catch (e) {}
+    return 'en';
   }
 
   function setLang(lang, rerender = true) {
@@ -97,15 +106,16 @@
     T = I18N[lang];
     document.documentElement.lang = lang;
     $('meta[name="description"]').content = T.metaDesc;
-    try { localStorage.setItem('gb-lang', lang); } catch (e) {}
+    try { localStorage.setItem('gb-lang-v2', lang); } catch (e) {}
     const url = new URL(location.href);
     url.searchParams.set('lang', lang);
     history.replaceState(null, '', url);
     $$('[data-i18n]').forEach((el) => { const v = get(T, el.dataset.i18n); if (typeof v === 'string') el.textContent = v; });
     $('#langCode').textContent = LANGS[lang].code;
+    $('#langFlag').src = flag(lang);
     $('#langList').innerHTML = Object.entries(LANGS).map(([k, v]) => `
       <button class="lang-opt" data-lang="${k}" aria-current="${k === lang}">
-        <span class="lang-opt__code">${v.code}</span>${esc(v.name)}<span class="lang-opt__check">${ICON.check}</span>
+        <img class="flag flag--lg" src="${flag(k)}" alt="" width="26" height="26">${esc(v.name)}<span class="lang-opt__code">${v.code}</span><span class="lang-opt__check">${ICON.check}</span>
       </button>`).join('');
     renderMega();
     renderSheet();
@@ -151,22 +161,14 @@
       </div>
       <div class="sheet__group"><a class="sheet__title" href="#/aterforsaljare">${esc(T.nav.dealers)}</a></div>
       <div class="sheet__group"><a class="sheet__title" href="#/kontakt">${esc(T.nav.contact)}</a></div>
-      <div class="sheet__group">
-        <button class="sheet__title" aria-expanded="false" data-acc>${esc(T.nav.services)} ${ICON.down}</button>
-        <div class="sheet__list" hidden>
-          <a class="mega__item" href="https://www.gregoire-besson.com/sv/parts-catalogues-manuals"><span class="mega__thumb" style="display:grid;place-items:center">⚙</span><span><b>${esc(T.nav.manuals)}</b></span></a>
-          <a class="mega__item" href="https://www.gregoire-besson.com/sv/video-tutorials"><span class="mega__thumb" style="display:grid;place-items:center">▶</span><span><b>${esc(T.nav.videos)}</b></span></a>
-          <a class="mega__item" href="https://marketing.gb-group.co/gregoire-besson"><span class="mega__thumb" style="display:grid;place-items:center">◧</span><span><b>${esc(T.nav.media)}</b></span></a>
-        </div>
-      </div>
-      <div class="sheet__langs">${Object.entries(LANGS).map(([k, v]) => `<button data-lang="${k}" aria-current="${k === state.lang}">${v.code}</button>`).join('')}</div>
+      <div class="sheet__group"><a class="sheet__title" href="#/service">${esc(T.nav.services)}</a></div>
+      <div class="sheet__langs">${Object.entries(LANGS).map(([k, v]) => `<button data-lang="${k}" aria-current="${k === state.lang}"><img class="flag" src="${flag(k)}" alt="" width="20" height="20">${v.code}</button>`).join('')}</div>
       <a class="btn btn--red btn--block" href="#/kontakt?typ=2">${esc(T.nav.quote)}</a>`;
   }
 
   function closeMenus(except) {
     if (except !== 'mega') { $('#mega').hidden = true; $('#megaBtn').setAttribute('aria-expanded', 'false'); }
     if (except !== 'lang') { $('#langMenu').hidden = true; $('#langBtn').setAttribute('aria-expanded', 'false'); }
-    if (except !== 'serv') { $('#servMenu').hidden = true; $('#servBtn').setAttribute('aria-expanded', 'false'); }
     if (except !== 'sheet') { $('#sheet').hidden = true; $('#burger').setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; }
     header.classList.toggle('is-open', !$('#mega').hidden || !$('#sheet').hidden);
   }
@@ -184,7 +186,6 @@
     addEventListener('scroll', setSolid, { passive: true });
     $('#megaBtn').addEventListener('click', () => toggle('mega', $('#megaBtn'), $('#mega')));
     $('#langBtn').addEventListener('click', () => toggle('lang', $('#langBtn'), $('#langMenu')));
-    $('#servBtn').addEventListener('click', () => toggle('serv', $('#servBtn'), $('#servMenu')));
     $('#burger').addEventListener('click', () => toggle('sheet', $('#burger'), $('#sheet')));
 
     // open the mega menu on hover for pointer devices
@@ -203,7 +204,7 @@
       const acc = e.target.closest('[data-acc]');
       if (acc) { const open = acc.getAttribute('aria-expanded') !== 'true'; acc.setAttribute('aria-expanded', String(open)); acc.nextElementSibling.hidden = !open; return; }
       if (e.target.closest('a[href]')) { closeMenus(); return; }
-      if (!e.target.closest('.pop, .mega, #langBtn, #servBtn, #megaBtn, #burger, .sheet')) closeMenus();
+      if (!e.target.closest('.pop, .mega, #langBtn, #megaBtn, #burger, .sheet')) closeMenus();
     });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenus(); });
     addEventListener('resize', syncConceptHeight);
@@ -217,11 +218,12 @@
     $('#footerCols').innerHTML = CATS.map((c) => `
       <div><h3>${esc(T.cats[c])}</h3><ul>${SERIES.filter((s) => s.cat === c).map((s) => `<li><a href="#/serie/${s.id}">${esc(s.name)}</a></li>`).join('')}</ul></div>`).join('') +
       `<div><h3>${esc(T.nav.services)}</h3><ul>
+        <li><a href="#/service">${esc(T.service.title)}</a></li>
         <li><a href="#/aterforsaljare">${esc(T.nav.dealers)}</a></li>
         <li><a href="#/kontakt">${esc(T.nav.contact)}</a></li>
-        <li><a href="https://www.gregoire-besson.com/sv/parts-catalogues-manuals">${esc(T.nav.manuals)}</a></li>
-        <li><a href="https://www.gregoire-besson.com/sv/video-tutorials">${esc(T.nav.videos)}</a></li>
-        <li><a href="https://marketing.gb-group.co/gregoire-besson">${esc(T.nav.media)}</a></li>
+        <li><a href="${EXT.manuals()}" target="_blank" rel="noopener">${esc(T.nav.manuals)}</a></li>
+        <li><a href="${EXT.youtube}" target="_blank" rel="noopener">${esc(T.nav.videos)}</a></li>
+        <li><a href="${EXT.media}" target="_blank" rel="noopener">${esc(T.nav.media)}</a></li>
       </ul></div>`;
     $('#legal').innerHTML = T.footer.legal.map((l, i) => `<li><a href="${LEGAL[i]}">${esc(l)}</a></li>`).join('');
   }
@@ -242,6 +244,7 @@
     serie: viewSeries,
     modell: viewModel,
     aterforsaljare: viewDealers,
+    service: viewService,
     kontakt: viewContact,
   };
 
@@ -405,7 +408,6 @@
             <a class="btn btn--red" href="#/maskiner">${esc(h.ctaFind)} ${ICON.arrow}</a>
             <a class="btn btn--glass" href="#/aterforsaljare">${esc(h.ctaDealer)}</a>
           </div>
-          <div class="hero__stats">${h.stats.map(([n, l]) => `<div><b>${esc(n)}</b><span>${esc(l)}</span></div>`).join('')}</div>
         </div>
       </section>
 
@@ -486,7 +488,6 @@
     if (hk >= HP_MIN && hk <= HP_MAX) state.hp = hk;
     const kat = r.query.get('kat');
     if (kat && CATS.includes(kat)) state.cat = kat;
-    const q = { v: '' };
     return {
       nav: 'machines',
       title: T.machines.title,
@@ -502,28 +503,76 @@
       <section class="section" style="padding-top:40px">
         <div class="wrap">${finderHTML({ id: 'machFinder' })}</div>
       </section>
-      <section class="section section--soft">
+      ${namesHTML()}`,
+      mount(app) {
+        mountFinder($('#machFinder', app), { grouped: true });
+        mountNames(app);
+      },
+    };
+  }
+
+  function namesHTML() {
+    return `<section class="section section--soft" id="names">
         <div class="wrap names">
           <div><h2 class="h2">${esc(T.names.title)}</h2><p class="lead" style="margin-top:14px">${esc(T.names.text)}</p></div>
           <div>
-            <label class="searchbar searchbar--line">${ICON.search}<input id="oldSearch" placeholder="${esc(T.names.placeholder)}" autocomplete="off"></label>
+            <label class="searchbar searchbar--line">${ICON.search}<input id="oldSearch" placeholder="${esc(T.names.placeholder)}" autocomplete="off" aria-label="${esc(T.names.title)}"></label>
             <div class="names__list" id="oldList"></div>
           </div>
         </div>
-      </section>`,
-      mount(app) {
-        mountFinder($('#machFinder', app), { grouped: true });
-        const list = $('#oldList', app);
-        const norm = (s) => s.toLowerCase().replace(/[\s,./()–-]+/g, '');
-        const draw = () => {
-          const s = q.v.trim();
-          const rows = OLD_NAMES.filter(([o, n]) => !s || norm(o).includes(norm(s)) || norm(n).includes(norm(s)));
-          const hl = (t) => { const i = s ? t.toLowerCase().indexOf(s.toLowerCase()) : -1; return i < 0 ? esc(t) : `${esc(t.slice(0, i))}<mark>${esc(t.slice(i, i + s.length))}</mark>${esc(t.slice(i + s.length))}`; };
-          list.innerHTML = rows.length ? rows.map(([o, n]) => `<div class="names__row"><span>${hl(o)}</span>${ICON.arrow}<b>${hl(n)}</b></div>`).join('') : `<div class="names__row">${esc(T.names.empty)}</div>`;
-        };
-        $('#oldSearch', app).addEventListener('input', (e) => { q.v = e.target.value; draw(); });
-        draw();
-      },
+      </section>`;
+  }
+
+  function mountNames(app) {
+    const list = $('#oldList', app);
+    const norm = (t) => t.toLowerCase().replace(/[\s,./()–-]+/g, '');
+    let q = '';
+    const draw = () => {
+      const v = q.trim();
+      const rows = OLD_NAMES.filter(([o, n]) => !v || norm(o).includes(norm(v)) || norm(n).includes(norm(v)));
+      const hl = (t) => { const i = v ? t.toLowerCase().indexOf(v.toLowerCase()) : -1; return i < 0 ? esc(t) : `${esc(t.slice(0, i))}<mark>${esc(t.slice(i, i + v.length))}</mark>${esc(t.slice(i + v.length))}`; };
+      list.innerHTML = rows.length ? rows.map(([o, n]) => `<div class="names__row"><span>${hl(o)}</span>${ICON.arrow}<b>${hl(n)}</b></div>`).join('') : `<div class="names__row">${esc(T.names.empty)}</div>`;
+    };
+    $('#oldSearch', app).addEventListener('input', (e) => { q = e.target.value; draw(); });
+    draw();
+  }
+
+  /* --- Service --- */
+  function viewService() {
+    const S = T.service;
+    const cards = [
+      { href: EXT.manuals(), ext: true, icon: ICON.wrench },
+      { href: EXT.youtube, ext: true, icon: ICON.media },
+      { href: '#/aterforsaljare', icon: ICON.pin },
+      { href: EXT.media, ext: true, icon: ICON.book },
+      { href: '#/kontakt', icon: ICON.call },
+    ];
+    return {
+      nav: 'service',
+      title: S.title,
+      html: `
+      <header class="phead">
+        <div class="wrap">
+          <nav class="crumbs"><a href="#/">Grégoire Besson</a>${ICON.chev}<span>${esc(T.nav.services)}</span></nav>
+          <p class="eyebrow">${esc(S.eyebrow)}</p>
+          <h1 class="h1">${esc(S.title)}</h1>
+          <p class="lead">${esc(S.text)}</p>
+        </div>
+      </header>
+      <section class="section" style="padding-top:40px">
+        <div class="wrap svc">
+          ${S.cards.map(([t, d], i) => {
+            const c = cards[i];
+            return `<a class="svc__card reveal" href="${c.href}" ${c.ext ? 'target="_blank" rel="noopener"' : ''}>
+              <span class="svc__icon">${c.icon}</span>
+              <span class="svc__text"><b>${esc(t)}</b><span>${esc(d)}</span></span>
+              <span class="svc__go" ${c.ext ? `title="${esc(S.external)}"` : ''}>${c.ext ? ICON.ext : ICON.arrow}</span>
+            </a>`;
+          }).join('')}
+        </div>
+      </section>
+      ${namesHTML()}`,
+      mount(app) { mountNames(app); },
     };
   }
 
@@ -567,7 +616,6 @@
     } else if (kind === 'reviews') {
       body = `<div class="reviews">${sec.features.map((f) => `
         <figure class="review reveal" style="margin:0">
-          <div class="stars" aria-hidden="true">★★★★★</div>
           <p>${esc(f.text.replace(/^[«"“]\s*|\s*[»"”]$/g, ''))}</p>
           <footer><span class="review__avatar">${esc((f.title || '?').trim()[0])}</span>${esc(f.title)}</footer>
         </figure>`).join('')}</div>`;
@@ -602,17 +650,20 @@
       <section class="shero">
         <img class="shero__img" src="${hero}" alt="">
         <div class="shero__inner">
-          <div>
-            <nav class="crumbs"><a href="#/">Grégoire Besson</a>${ICON.chev}<a href="#/maskiner">${esc(T.nav.machines)}</a>${ICON.chev}<span>${esc(T.cats[s.cat])}</span></nav>
-            <h1>${esc(s.name)}</h1>
-            <p class="shero__fn">${esc(T.seriesFn[sid])}</p>
-            <p class="shero__intro">${esc(c.intro)}</p>
-            <div class="shero__ctas">
-              <a class="btn btn--red" href="#/kontakt?typ=2&serie=${sid}">${esc(T.series.quote)} ${ICON.arrow}</a>
-              <a class="btn btn--glass" href="#/aterforsaljare">${esc(T.series.dealer)}</a>
-            </div>
+          <nav class="crumbs"><a href="#/">Grégoire Besson</a>${ICON.chev}<a href="#/maskiner">${esc(T.nav.machines)}</a>${ICON.chev}<span>${esc(T.cats[s.cat])}</span></nav>
+          <h1>${esc(s.name)}</h1>
+          <p class="shero__fn">${esc(T.seriesFn[sid])}</p>
+          <div class="shero__ctas">
+            <a class="btn btn--red" href="#/kontakt?typ=2&serie=${sid}">${esc(T.series.quote)} ${ICON.arrow}</a>
+            <a class="btn btn--glass" href="#/aterforsaljare">${esc(T.series.dealer)}</a>
           </div>
-          <div class="kpis">
+        </div>
+      </section>
+
+      <section class="overview">
+        <div class="wrap overview__inner">
+          <p class="overview__intro reveal">${esc(c.intro)}</p>
+          <div class="kpis reveal">
             <div class="kpi"><span>${esc(T.series.power)}</span><b>${lo}–${hi} ${T.hp}</b></div>
             <div class="kpi"><span>${esc(T.series.width)}</span><b>${num(wlo, 1)}–${num(whi, 1)} m</b></div>
             <div class="kpi"><span>${esc(T.series.models)}</span><b>${ms.length}</b></div>
@@ -630,8 +681,6 @@
           <a class="btn btn--red btn--sm" href="#/kontakt?typ=2&serie=${sid}">${esc(T.series.quote)}</a>
         </div>
       </nav>
-
-      ${c.quote ? `<section class="section" style="padding-bottom:0"><div class="wrap quote reveal"><p>${esc(c.quote)}</p></div></section>` : ''}
 
       <section class="section" id="models">
         <div class="wrap">
@@ -817,7 +866,7 @@
           });
           if (fit && current.length) {
             const b = L.latLngBounds(current.map((d) => [d[5], d[6]]));
-            map.fitBounds(b.pad(0.15), { maxZoom: 10, animate: true });
+            map.fitBounds(b.pad(0.15), { maxZoom: 10, animate: false });
           }
         };
         const highlight = (i, fly = true) => {
@@ -866,7 +915,7 @@
         });
         filter();
         initMap();
-        return () => { if (map) map.remove(); };
+        return () => { if (map) { map.stop(); map.off(); map.remove(); map = null; } };
       },
     };
   }
@@ -901,7 +950,7 @@
           <form class="form" id="cform" novalidate>
             <h2>${esc(C.want)}</h2>
             <div class="types" role="radiogroup">
-              ${C.types.map(([t, d], i) => `<label class="type"><input type="radio" name="type" value="${i}" ${typ === i ? 'checked' : ''}><span class="type__box"><span class="type__icon">${icons[i]}</span><span><b>${esc(t)}</b><br><small>${esc(d)}</small></span></span></label>`).join('')}
+              ${C.types.map((t, i) => `<label class="type"><input type="radio" name="type" value="${i}" ${typ === i ? 'checked' : ''}><span class="type__box"><span class="type__icon">${icons[i]}</span><b>${esc(t)}</b></span></label>`).join('')}
             </div>
             <p class="field__err" id="typeErr" hidden style="margin:-16px 0 20px">${esc(C.pick)}</p>
             <div class="fields">
@@ -935,7 +984,7 @@
           </form>
           <aside class="side">
             <a class="sidecard sidecard--img" href="#/aterforsaljare"><img src="${seriesCover('voyager')}" alt="" loading="lazy"><div><b>${esc(C.sideDealer)}</b><span>${esc(C.sideDealerText)}</span></div></a>
-            <a class="sidecard" href="https://marketing.gb-group.co/gregoire-besson"><span class="sidecard__icon">${ICON.media}</span><div><b>${esc(C.sideMedia)}</b><span>${esc(C.sideMediaText)}</span></div></a>
+            <a class="sidecard" href="${EXT.media}" target="_blank" rel="noopener"><span class="sidecard__icon">${ICON.media}</span><div><b>${esc(C.sideMedia)}</b><span>${esc(C.sideMediaText)}</span></div></a>
             <div class="sidecard" style="flex-direction:column;align-items:flex-start"><b>${esc(C.sideFollow)}</b>${$('.footer .social').outerHTML}</div>
           </aside>
         </div>
